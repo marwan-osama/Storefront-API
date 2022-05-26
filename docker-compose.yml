@@ -4,11 +4,23 @@ services:
   postgres:
     image: postgres
     ports:
-      - '5432:5432'
+      - '${POSTGRES_PORT}:5432'
     env_file:
       - .env
+    environment:
+      - POSTGRES_DB=${DB}
     volumes:
       - 'postgres:/var/lib/postgresql/data'
+  postgres-test:
+    image: postgres
+    ports:
+      - '${POSTGRES_TEST_PORT}:5432'
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=${TEST_DB}
+
+
 
 volumes:
   postgres:

@@ -1,42 +1,131 @@
-# API Requirements
-The company stakeholders want to create an online storefront to showcase their great product ideas. Users need to be able to browse an index of all products, see the specifics of a single product, and add products to an order that they can view in a cart page. You have been tasked with building the API that will support this application, and your coworker is building the frontend.
 
-These are the notes from a meeting with the frontend developer that describe what endpoints the API needs to supply, as well as data shapes the frontend and backend have agreed meet the requirements of the application. 
+## API Reference
 
-## API Endpoints
 #### Products
-- Index 
-- Show
-- Create [token required]
-- [OPTIONAL] Top 5 most popular products 
-- [OPTIONAL] Products by category (args: product category)
+
+* Get all products
+
+```http
+  GET /products
+```
+
+
+* Get product
+
+```http
+  GET /products/${id}
+```
+
+| Parameter | Type     |
+| :-------- | :------- |
+| `id`      | `string` |
+
+* Create product (authorization token must be provided)
+
+```http
+  POST /products
+```
+
+| body queries    | Type     | Description  |
+| :-------------- | :------- | :------------|
+| `product_name`  | `string` | **Required** |
+| `product_price` | `number` | **Required** |
+
+
 
 #### Users
-- Index [token required]
-- Show [token required]
-- Create N[token required]
+
+* Get all users (authorization token must be provided)
+
+```http
+  GET /users
+```
+
+
+* Get user (authorization token must be provided)
+
+```http
+  GET /users/${userid}
+```
+
+| Parameter | Type     |
+| :-------- | :------- |
+| `id`      | `string` |
+
+* Create user (authorization token must be provided)
+
+```http
+  POST /users
+```
+
+| body queries  | Type     | Description  |
+| :------------ | :------- | :----------- |
+| `firstname`   | `string` | **Required** |
+| `lastname`    | `string` | **Required** |
+| `password`    | `string` | **Required** |
+
+
 
 #### Orders
-- Current Order by user (args: user id)[token required]
-- [OPTIONAL] Completed Orders by user (args: user id)[token required]
 
-## Data Shapes
-#### Product
--  id
-- name
-- price
-- [OPTIONAL] category
+* Get order
 
-#### User
-- id
-- firstName
-- lastName
-- password
+```http
+  GET /orders/${userid}
+```
+
+| Parameter | Type     | Description    |
+| :-------- | :------- | :------------- |
+| `userid`  | `string` | **Required**.  |
+
+* add products to order (authorization token must be provided)
+
+```http
+  POST /orders/${userid}
+```
+
+| body queries  | Type     | Description    |
+| :------------ | :------- | :------------- |
+| `product_id`  | `string` | **Required**.  |
+| `quantity`    | `number` | optional.      |
+
+
+
+## Database schema
+
+#### Products
+
+* Products table
+| columns | Type                 |
+| :-----  | :------------------- |
+| `id`    | `SERIAL PRIMARY KEY` |
+| `name`  | `VARCHAR`            |
+| `price` | `INT`                |
+
+#### Users
+
+* Users table
+| columns           | Type                 |
+| :-----            | :------------------- |
+| `id`              | `SERIAL PRIMARY KEY` |
+| `firstname`       | `VARCHAR`            |
+| `lastname`        | `VARCHAR`            |
+| `password_digest` | `VARCHAR`            |
 
 #### Orders
-- id
-- id of each product in the order
-- quantity of each product in the order
-- user_id
-- status of order (active or complete)
 
+* Orders table
+| columns   | Type                 |
+| :-----    | :------------------- |
+| `id`      | `SERIAL PRIMARY KEY` |
+| `user_id` | `INT`                |
+| `status`  | `VARCHAR`            |
+
+
+* Order products table
+| columns      | Type                          |
+| :-------     | :---------------------------- |
+| `id`         | `SERIAL PRIMARY KEY`          |
+| `order_id`   | `INT REFERENCES orders(id)`   |
+| `product_id` | `INT REFERENCES products(id)` |
+| `quantity`   | `INT`                         |
