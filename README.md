@@ -76,14 +76,6 @@ To run this project, you will need to add the following environment variables to
 ```
 
 
-## Running Tests
-
-To run tests, run the following command
-
-```bash
-  npm run test
-```
-
 
 ## Ports
 
@@ -92,4 +84,14 @@ To run tests, run the following command
 * test database port can be *specified in environment variables*
 
 * server port is (3000)
+
+
+
+## Running Tests
+
+To run tests, run the following command
+
+```bash
+  npm run test
+```
 
